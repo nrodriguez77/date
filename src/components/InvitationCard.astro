@@ -6,10 +6,11 @@ interface Props {
 }
 
 // const { onAccept } = Astro.props; // Not needed with custom events
+const baseUrl = import.meta.env.BASE_URL;
 ---
 <div class="bg-white p-8 rounded-lg shadow-xl text-center max-w-md w-full relative">
   <!-- Image: flowers.png -->
-  <img src="/flowers.png" alt="Flowers" class="absolute top-4 right-4 w-20 h-auto" />
+  <img src={`${baseUrl}/flowers.png`} alt="Flores" class="absolute top-4 right-4 w-20 h-auto" />
   <!-- New Rose Icon -->
   <div class="flex justify-center mb-4">
     <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flower text-pink-600">
