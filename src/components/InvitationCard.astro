@@ -1,0 +1,127 @@
+---
+import ValentineIcons from './ValentineIcons.astro';
+
+interface Props {
+  // onAccept: () => void; // We'll use a custom event instead of a prop for client-side communication
+}
+
+// const { onAccept } = Astro.props; // Not needed with custom events
+---
+<div class="bg-white p-8 rounded-lg shadow-xl text-center max-w-md w-full relative">
+  <!-- Image: flowers.png -->
+  <img src="/flowers.png" alt="Flowers" class="absolute top-4 right-4 w-20 h-auto" />
+  <!-- New Rose Icon -->
+  <div class="flex justify-center mb-4">
+    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-flower text-pink-600">
+      
+    </svg>
+  </div>
+  <ValentineIcons />
+  <h1 class="text-3xl font-bold text-red-500 mb-6">
+    ¿Te gustaría salir a comer en este San Valentín?
+  </h1>
+  <p class="text-gray-600 mb-2">El botón SÍ esta ahí!</p>
+
+  <div class="flex flex-col items-center justify-center space-y-4 min-h-[250px]"> {/* min-h for button movement */}
+    <button
+      id="yesButton"
+      class="bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-full transition-all duration-300 text-xl px-8 py-4"
+      onclick="document.dispatchEvent(new CustomEvent('invite:accept'))"
+    >
+      SÍ
+    </button>
+    <button
+      id="noButton"
+      class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-6 rounded-full transition-all duration-300"
+    >
+      NO
+    </button>
+    <p class="text-gray-600 mb-2">Mira que grande es el Botón SI!..👀</p>
+  </div>
+</div>
+
+<script>
+  const noButton = document.getElementById('noButton');
+  const yesButton = document.getElementById('yesButton');
+  let noClickCount = 0;
+  const noButtonTexts = [
+    "¿Segura?",
+    "¡Anda, di que si jajaj!",
+    "No seas así...",
+    "¡El botón SÍ se hace más grande jijiji!",
+    "¡Cada vez más grande!",
+    "Muuucho mas grande xd",
+    "No me hagas rogar!",
+    "Di que SÍ de una vez!",
+    "Aveeeeer si que si jaja",
+    "Mi corazón no aguanta tanto NO!",
+    "¡No te lo pienses más!",
+    "¡Por favor, SÍ!",
+    "¡Una última oportunidad para el NO!",
+    "El NO lo dio todo uu"
+  ];
+
+  const handleNoClick = () => {
+    noClickCount++;
+    noButton.textContent = noButtonTexts[noClickCount % noButtonTexts.length];
+
+    // Make YES button larger and change position
+    const yesButtonParent = yesButton.parentElement;
+    if (yesButtonParent) {
+      yesButtonParent.classList.remove('justify-center', 'justify-start', 'justify-end');
+
+      let currentSizeClass = '';
+      if (yesButton.classList.contains('text-xl')) {
+        currentSizeClass = 'text-xl';
+      } else if (yesButton.classList.contains('text-2xl')) {
+        currentSizeClass = 'text-2xl';
+      } else if (yesButton.classList.contains('text-3xl')) {
+        currentSizeClass = 'text-3xl';
+      } else if (yesButton.classList.contains('text-4xl')) {
+        currentSizeClass = 'text-4xl';
+      }else if (yesButton.classList.contains('text-5xl')) {
+        currentSizeClass = 'text-5xl';
+      }else if (yesButton.classList.contains('text-6xl')) {
+        currentSizeClass = 'text-6xl';
+      }
+
+      yesButton.classList.remove('text-xl', 'px-8', 'py-4', 'text-2xl', 'px-10', 'py-5', 'text-3xl', 'px-12', 'py-6', 'text-4xl', 'px-14', 'py-7');
+
+      let newSizeClass = '';
+      let newPositionClass = '';
+
+      switch (currentSizeClass) {
+        case 'text-xl':
+          newSizeClass = 'text-2xl px-10 py-5';
+          newPositionClass = 'justify-start'; // Moves YES button to top
+          break;
+        case 'text-2xl':
+          newSizeClass = 'text-3xl px-12 py-6';
+          newPositionClass = 'justify-end'; // Moves YES button to bottom
+          break;
+        case 'text-3xl':
+          newSizeClass = 'text-4xl px-14 py-7';
+          newPositionClass = 'justify-center'; // Moves YES button to center (largest)
+          break;
+        case 'text-4xl':
+          newSizeClass = 'text-5xl px-16 py-9';
+          newPositionClass = 'justify-center'; // Moves YES button to center (largest)
+          break;
+        case 'text-5xl':
+          newSizeClass = 'text-6xl px-18 py-12';
+          newPositionClass = 'justify-center'; // Moves YES button to center (largest)
+          break;
+        default: // After text-4xl, keep it large but can cycle positions
+          newSizeClass = 'text-6xl px-18 py-12';
+          const positions = ['justify-start', 'justify-center', 'justify-end'];
+          newPositionClass = positions[noClickCount % positions.length];
+          break;
+      }
+
+      yesButton.classList.add(...newSizeClass.split(' '));
+      yesButtonParent.classList.add(newPositionClass);
+    }
+  };
+
+  noButton.addEventListener('click', handleNoClick);
+</script>
